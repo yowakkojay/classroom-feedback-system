@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pip3 --version)",
+      "Bash(npm --version)",
+      "Bash(mysql --version)",
+      "Bash(pip3 install:*)",
+      "Bash(python3 -m venv venv)",
+      "Bash(source venv/bin/activate)",
+      "Bash(pip install:*)",
+      "Bash(django-admin startproject:*)",
+      "Bash(python manage.py startapp users apps/users)",
+      "Bash(python manage.py startapp feedback apps/feedback)",
+      "Bash(python manage.py startapp discussion apps/discussion)",
+      "Bash(python manage.py makemigrations)",
+      "Bash(python manage.py migrate)",
+      "Bash(DJANGO_SUPERUSER_PASSWORD=REDACTED_ADMIN_PASSWORD python manage.py createsuperuser --username admin --email admin@example.com --noinput)",
+      "Bash(python -c \":*)",
+      "Bash(python manage.py shell -c \":*)",
+      "Bash(npm create:*)",
+      "Bash(npm install:*)",
+      "Bash(ls /home/yuwanjie/ywj_workspace/Advanced_Software_Engineering/first_team_work/frontend/src/views/student/*.vue /home/yuwanjie/ywj_workspace/Advanced_Software_Engineering/first_team_work/frontend/src/views/teacher/*.vue /home/yuwanjie/ywj_workspace/Advanced_Software_Engineering/first_team_work/frontend/src/views/admin/*.vue)",
+      "Bash(/home/yuwanjie/ywj_workspace/Advanced_Software_Engineering/first_team_work/frontend/src/views/teacher/Statistics.vue:*)",
+      "Bash(npx vite:*)",
+      "Bash(git init *)",
+      "Bash(git add *)"
+    ]
+  }
+}
