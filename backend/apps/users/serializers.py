@@ -22,7 +22,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = [
             'id', 'username', 'first_name', 'last_name', 'role',
-            'phone', 'age', 'gender', 'is_active',
+            'phone', 'age', 'gender', 'is_active', 'github_id',
             'student_profile', 'teacher_profile',
         ]
         read_only_fields = ['id']
