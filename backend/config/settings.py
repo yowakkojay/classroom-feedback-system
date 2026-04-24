@@ -2,16 +2,21 @@
 Django settings for config project.
 """
 
+import os
 from pathlib import Path
 from datetime import timedelta
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'REDACTED_SECRET_KEY'
+# Security settings - loaded from environment
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-change-me-in-production')
+DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 
-DEBUG = True
-
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
 INSTALLED_APPS = [
     'daphne',
@@ -68,25 +73,20 @@ CHANNEL_LAYERS = {
     }
 }
 
-# Database - SQLite for dev, switch to MySQL for production
+# Database - configured via environment variables
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': os.getenv('DB_ENGINE', 'django.db.backends.sqlite3'),
+        'NAME': os.getenv('DB_NAME', BASE_DIR / 'db.sqlite3'),
+        'USER': os.getenv('DB_USER', ''),
+        'PASSWORD': os.getenv('DB_PASSWORD', ''),
+        'HOST': os.getenv('DB_HOST', ''),
+        'PORT': os.getenv('DB_PORT', ''),
+        'OPTIONS': {
+            'charset': 'utf8mb4',
+        } if os.getenv('DB_ENGINE') == 'django.db.backends.mysql' else {},
     }
 }
-
-# To switch to MySQL, uncomment below:
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'classroom_monitor',
-#         'USER': 'root',
-#         'PASSWORD': 'your_password',
-#         'HOST': '127.0.0.1',
-#         'PORT': '3306',
-#     }
-# }
 
 AUTH_USER_MODEL = 'users.User'
 
@@ -112,8 +112,11 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
 }
 
-# CORS
-CORS_ALLOW_ALL_ORIGINS = True
+# CORS - configured via environment
+CORS_ALLOWED_ORIGINS = os.getenv(
+    'CORS_ORIGINS',
+    'http://localhost:8080,http://localhost:5173'
+).split(',')
 
 # i18n
 LANGUAGE_CODE = 'zh-hans'
@@ -123,17 +126,22 @@ USE_TZ = True
 
 # Static & Media
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+# 前端构建文件目录
+FRONTEND_DIST = BASE_DIR.parent / 'frontend' / 'dist'
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# GitHub OAuth
-GITHUB_CLIENT_ID = 'REDACTED_GITHUB_ID'
-GITHUB_CLIENT_SECRET = 'REDACTED_GITHUB_SECRET'
+# GitHub OAuth - loaded from environment
+GITHUB_CLIENT_ID = os.getenv('GITHUB_CLIENT_ID', '')
+GITHUB_CLIENT_SECRET = os.getenv('GITHUB_CLIENT_SECRET', '')
 
-# HTTP Proxy (Clash Verge)
-PROXIES = {
-    'http': 'REDACTED_PROXY',
-    'https': 'REDACTED_PROXY',
-}
+# HTTP Proxy (optional)
+PROXIES = {}
+if os.getenv('HTTP_PROXY'):
+    PROXIES['http'] = os.getenv('HTTP_PROXY')
+if os.getenv('HTTPS_PROXY'):
+    PROXIES['https'] = os.getenv('HTTPS_PROXY')

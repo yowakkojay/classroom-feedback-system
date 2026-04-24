@@ -27,6 +27,10 @@ Thumbs.db
 # Secrets
 .env
 *.pem
+.claude/
+
+# Static files (collected)
+backend/staticfiles/
 
 # Misc
 使用.txt
